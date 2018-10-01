@@ -4,6 +4,10 @@ var token = require('./secrets');
 
 var fs = require('fs');
 
+var arg = process.argv.slice(2)
+
+
+
 
 function getRepoContributors(repoOwner, repoName, cb) {
   var options = {
@@ -19,13 +23,10 @@ function getRepoContributors(repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors("jquery", "jquery", function(err, result) {
+getRepoContributors(arg[0], arg[1], function(err, result) {
   console.log("Errors---->", err);
-  var parse = JSON.parse(result)
-  // console.log(parse);
-  for(var contributor of parse){
-    // var downloadUrl = contributor.avatar_url
-    // console.log("Result---->", contributor.avatar_url);
+  var parse = JSON.parse(result);
+  for(var contributor of parse) {
     downloadImageByURL(contributor.avatar_url, `./downloadpicture/${contributor.login}.jpg`)
   }
 });
@@ -41,3 +42,9 @@ function downloadImageByURL(url, filePath) {
       console.log('Download complete!');
     });
 }
+
+// function nodeInput(owner, repo) {
+//   var arg = process.argv.slice(2)
+//   var owner = arg[0];
+//   var repo = arg[1];
+// }
