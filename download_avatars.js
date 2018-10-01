@@ -4,7 +4,7 @@ var token = require('./secrets');
 
 var fs = require('fs');
 
-var arg = process.argv.slice(2)
+var arg = process.argv.slice(2);
 
 
 
@@ -24,11 +24,19 @@ function getRepoContributors(repoOwner, repoName, cb) {
 }
 
 getRepoContributors(arg[0], arg[1], function(err, result) {
-  console.log("Errors---->", err);
-  var parse = JSON.parse(result);
-  for(var contributor of parse) {
-    downloadImageByURL(contributor.avatar_url, `./downloadpicture/${contributor.login}.jpg`)
+  if(err) {
+    console.log("Errors---->", err);
   }
+  console.log(result);
+  var parse = JSON.parse(result);
+
+  if(parse.message == 'Not Found'){
+    console.log("Invalid owner or repo names!!! Use this format: ownername reponame (For example: jquery jquery) ");
+  } else {
+    for(var contributor of parse) {
+      downloadImageByURL(contributor.avatar_url, `./downloadpicture/${contributor.login}.jpg`)
+    };
+  };
 });
 
 function downloadImageByURL(url, filePath) {
@@ -42,9 +50,3 @@ function downloadImageByURL(url, filePath) {
       console.log('Download complete!');
     });
 }
-
-// function nodeInput(owner, repo) {
-//   var arg = process.argv.slice(2)
-//   var owner = arg[0];
-//   var repo = arg[1];
-// }
